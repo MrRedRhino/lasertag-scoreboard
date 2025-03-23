@@ -2,14 +2,17 @@
 import {connected, discoverDevices} from "@/serial.js";
 import CombinedLeaderboardStat from "@/components/leaderboard/AggregatedLeaderboardStat.vue";
 import {useToast} from "primevue";
-import {watch} from "vue";
+import {ref, watch} from "vue";
 import {formatTime, leaderboard, secondsLeft, startGame, stopGame} from "@/game_state.js";
 import {roundDivision} from "./main.js";
 import TeamTable from "@/components/leaderboard/TeamTable.vue";
+import TeamDivision from "@/components/TeamDivision.vue";
+import GameConfigDrawer from "@/components/GameConfigDrawer.vue";
 
 const toast = useToast();
 // const serialUnavailable = navigator.serial === undefined;
 const serialUnavailable = false;
+const gameSettingsVisible = ref(false);
 
 function computeAverageKD(teamId) {
   const teamKDs = leaderboard.value
@@ -46,6 +49,7 @@ watch(connected, value => {
     </template>
   </Dialog>
 
+
   <div class="flex items-center bg-zinc-900 p-2">
     <div class="flex-1">
       <div class="flex items-center gap-1">
@@ -66,7 +70,11 @@ watch(connected, value => {
   <Button @click="startGame()">Start</Button>
   <Button @click="stopGame()">Stop</Button>
 
-  <div class="w-screen flex items-center flex-col mt-12">
+  <TeamDivision/>
+  <GameConfigDrawer v-model:visible="gameSettingsVisible"/>
+  <Button label="open settings" @click="gameSettingsVisible = true"/>
+
+  <div class="flex items-center flex-col mt-12">
     <div class="bg-zinc-950">
       <TeamTable :team="0"/>
 

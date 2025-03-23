@@ -8,6 +8,10 @@
     src: url("ScoutCond-Regular.otf");
 }
 
+.p-dialog-header {
+    padding-bottom: 12px !important;
+}
+
 body {
     height: 100dvh;
     font-family: scout,

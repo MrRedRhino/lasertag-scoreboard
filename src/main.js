@@ -4,7 +4,18 @@ import {createApp} from 'vue'
 import App from './App.vue'
 import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
-import {Button, Column, DataTable, Dialog, Message, Toast, ToastService} from "primevue";
+import {
+    Button,
+    Column, ContextMenu,
+    DataTable,
+    Dialog,
+    Drawer, InputMask,
+    InputNumber,
+    InputText,
+    Message, Select,
+    Toast,
+    ToastService, ToggleSwitch
+} from "primevue";
 import {definePreset} from "@primevue/themes";
 
 export const teamColors = [
@@ -45,4 +56,11 @@ createApp(App)
     .component("Button", Button)
     .component("Dialog", Dialog)
     .component("Message", Message)
+    .component("InputNumber", InputNumber)
+    .component("InputText", InputText)
+    .component("InputMask", InputMask)
+    .component("ToggleSwitch", ToggleSwitch)
+    .component("Drawer", Drawer)
+    .component("ContextMenu", ContextMenu)
+    .component("Select", Select)
     .mount('#app');

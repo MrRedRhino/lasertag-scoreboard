@@ -31,12 +31,17 @@ export const leaderboard = ref([
         playerId: "Olek"
     }
 ]);
+export const teams = reactive([[], []]);
 export const gameConfig = reactive({
     gameMode: "arcade",
     prepPhaseSeconds: 40,
     roundDurationSeconds: 165,
-    damagePerShot: 42,
-
+    baseDamage: 42,
+    resistance: 1,
+    regenerationSpeed: 1,
+    friendlyFire: true,
+    doGunSound: true,
+    enableLaser: true,
 });
 export const running = ref(false);
 let countdownIntervalId = 0;

@@ -4,6 +4,7 @@ import {leaderboard} from "@/game_state.js";
 let currentMessage = "";
 
 let connectedPort = null;
+let writer = null;
 export const connected = ref(false);
 
 setTimeout(async () => {
@@ -43,11 +44,12 @@ function onDisconnect(port) {
 async function openPort(port) {
     await port.open({baudRate: 9600});
 
-    const writer = port.writable.getWriter();
-    setTimeout(async () => {
-        await writer.write(new Uint8Array([1]));
-        writer.releaseLock();
-    }, 2000);
+    writer = port.writable.getWriter();
+
+    // setTimeout(async () => {
+    //     await writer.write(new Uint8Array([1]));
+    //     writer.releaseLock();
+    // }, 2000);
 
     setTimeout(async () => {
         try {
@@ -72,7 +74,4 @@ async function openPort(port) {
 export async function discoverDevices() {
     const port = await navigator.serial.requestPort();
     await onConnect(port);
-}
-
-export class connect {
 }
