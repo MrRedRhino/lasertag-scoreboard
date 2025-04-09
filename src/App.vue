@@ -1,34 +1,12 @@
 <script setup>
 import {connected, discoverDevices} from "@/serial.js";
-import CombinedLeaderboardStat from "@/components/leaderboard/AggregatedLeaderboardStat.vue";
 import {useToast} from "primevue";
-import {ref, watch} from "vue";
-import {formatTime, leaderboard, secondsLeft, startGame, stopGame} from "@/game_state.js";
-import {roundDivision} from "./main.js";
-import TeamTable from "@/components/leaderboard/TeamTable.vue";
-import TeamDivision from "@/components/TeamDivision.vue";
-import GameConfigDrawer from "@/components/GameConfigDrawer.vue";
+import {watch} from "vue";
+import {formatTime, gameConfig, gameState, gameStates, running, secondsLeft} from "@/game_state.js";
 
 const toast = useToast();
 // const serialUnavailable = navigator.serial === undefined;
 const serialUnavailable = false;
-const gameSettingsVisible = ref(false);
-
-function computeAverageKD(teamId) {
-  const teamKDs = leaderboard.value
-      .filter(p => p.teamId === teamId)
-      .map(p => roundDivision(p.kills, p.deaths));
-
-  return roundDivision(teamKDs.reduce((acc, v) => acc + v, 0), teamKDs.length).toFixed(2);
-}
-
-function computeAverageKills(teamId) {
-  const teamKDs = leaderboard.value
-      .filter(p => p.teamId === teamId)
-      .map(p => p.kills);
-
-  return roundDivision(teamKDs.reduce((acc, v) => acc + v, 0), teamKDs.length).toFixed(2);
-}
 
 watch(connected, value => {
   if (value) {
@@ -37,6 +15,19 @@ watch(connected, value => {
     toast.add({severity: 'warn', summary: "Connection", detail: 'Lost connection to Game Master', life: 3000});
   }
 });
+
+function mapGameStateToString(state) {
+  switch (state) {
+    case gameStates.NOT_STARTED:
+      return "Not Started";
+    case gameStates.PREP_PHASE:
+      return "Prep Phase";
+    case gameStates.ACTION_PHASE:
+      return "Action Phase";
+    case gameStates.ENDED:
+      return "Ended";
+  }
+}
 </script>
 
 <template>
@@ -49,7 +40,6 @@ watch(connected, value => {
     </template>
   </Dialog>
 
-
   <div class="flex items-center bg-zinc-900 p-2">
     <div class="flex-1">
       <div class="flex items-center gap-1">
@@ -61,44 +51,15 @@ watch(connected, value => {
 
     <div class="flex items-center gap-2">
       <i class="pi pi-clock"></i>
-      <h1 class="text-3xl font-bold">{{ formatTime(secondsLeft) }}</h1>
+      <h1 class="text-3xl font-bold">{{ formatTime(running ? secondsLeft : gameConfig.prepPhaseSeconds) }}</h1>
+      <Tag severity="secondary" :value="mapGameStateToString(gameState)"/>
     </div>
 
     <div class="flex-1"></div>
   </div>
 
-  <Button @click="startGame()">Start</Button>
-  <Button @click="stopGame()">Stop</Button>
-
-  <TeamDivision/>
-  <GameConfigDrawer v-model:visible="gameSettingsVisible"/>
-  <Button label="open settings" @click="gameSettingsVisible = true"/>
-
-  <div class="flex items-center flex-col mt-12">
-    <div class="bg-zinc-950">
-      <TeamTable :team="0"/>
-
-      <div class="flex flex-row gap-8 m-4 justify-center">
-        <CombinedLeaderboardStat
-            title="AVG. K/D"
-            :value-team1="computeAverageKD(0)"
-            :value-team2="computeAverageKD(1)"
-            :team1-id="0"
-            :team2-id="1"/>
-        <CombinedLeaderboardStat
-            title="AVG. KILLS"
-            :value-team1="computeAverageKills(0)"
-            :value-team2="computeAverageKills(1)"
-            :team1-id="0"
-            :team2-id="1"/>
-      </div>
-
-      <TeamTable :team="1"/>
-
-      <div class="h-16"></div>
-
-      <TeamTable :team="2"/>
-    </div>
+  <div class="content flex items-center flex-col mt-12">
+    <router-view/>
   </div>
 </template>
 

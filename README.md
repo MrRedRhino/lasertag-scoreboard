@@ -1,5 +1,7 @@
 # lasertag-scoreboard
 
+https://docs.google.com/spreadsheets/d/18mY-sr0yFhgQchjZz17HoWcaen5f13fjqpg5dCfeUOQ/edit?gid=0#gid=0
+
 This template should help get you started developing with Vue 3 in Vite.
 
 ## Recommended IDE Setup

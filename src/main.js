@@ -6,22 +6,36 @@ import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
 import {
     Button,
-    Column, ContextMenu,
+    Column,
+    ContextMenu,
     DataTable,
     Dialog,
-    Drawer, InputMask,
+    Drawer,
+    InputGroup,
+    InputMask,
     InputNumber,
     InputText,
-    Message, Select,
+    Message,
+    Select,
+    Tag,
     Toast,
-    ToastService, ToggleSwitch
+    ToastService,
+    ToggleSwitch
 } from "primevue";
 import {definePreset} from "@primevue/themes";
+import {createRouter, createWebHashHistory} from "vue-router";
+import SetupView from "@/components/views/SetupView.vue";
+import MatchRecapView from "@/components/views/MatchRecapView.vue";
 
 export const teamColors = [
     "#ed292c",
     "#0070cd",
     "#da6200"
+];
+
+const routes = [
+    {path: "/", component: SetupView},
+    {path: "/leaderboard", component: MatchRecapView}
 ];
 
 export function roundDivision(a, b) {
@@ -49,6 +63,10 @@ createApp(App)
             preset: preset
         }
     })
+    .use(createRouter({
+        history: createWebHashHistory(),
+        routes: routes
+    }))
     .use(ToastService)
     .component("Toast", Toast)
     .component("DataTable", DataTable)
@@ -56,6 +74,7 @@ createApp(App)
     .component("Button", Button)
     .component("Dialog", Dialog)
     .component("Message", Message)
+    .component("InputGroup", InputGroup)
     .component("InputNumber", InputNumber)
     .component("InputText", InputText)
     .component("InputMask", InputMask)
@@ -63,4 +82,5 @@ createApp(App)
     .component("Drawer", Drawer)
     .component("ContextMenu", ContextMenu)
     .component("Select", Select)
+    .component("Tag", Tag)
     .mount('#app');

@@ -71,7 +71,7 @@ function save() {
         <ToggleSwitch class="ml-auto" v-model="gameConfig.enableLaser"/>
       </div>
 
-      <Button class="mt-auto" @click="save" label="Save" fluid/>
+      <Button class="mt-auto" @click="visible = false" label="Close" fluid/>
     </div>
   </Drawer>
 </template>
